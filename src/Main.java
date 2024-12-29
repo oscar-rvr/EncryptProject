@@ -6,31 +6,66 @@ public class Main {
     public static void main(String[] args) {
 //Original message
         Scanner scan = new Scanner(System.in);
-        String message = scan.nextLine();
-        int key = scan.nextInt();
-        //Stringbuilder for create cipherText;
-        StringBuilder ciphertext =   new StringBuilder();
+        String target="";
+        String message="";
+        int key;
 
-        for (int i  = 0; i<message.length();  i++){
-            char c = message.charAt(i);
 
-            //validation of lowercase letters
-            if(c>= 'a' && c<= 'z'){
-                char encryptedChar = funEncryptLetter(c,key);
-                ciphertext.append(encryptedChar);//add cipher letter
-            }else{
-                ciphertext.append(c);
+        while(true){
+            target=scan.nextLine();
+
+            if(target.equals("enc") || target.equals("dec")){
+
+                message = scan.nextLine();
+                key = scan.nextInt();
+                scan.nextLine();
+                //Stringbuilder for create cipherText;
+                StringBuilder ciphertext =   new StringBuilder();
+                ciphertext=processMessage(message,key, target.equals("enc"));
+
+
+                System.out.println(ciphertext);
             }
+
 
 
         }
 
 
-        System.out.println(ciphertext);
+
+
+
+
 
     }
     private static char funEncryptLetter ( char letter,int key){
         return (char) ('a' + (letter - 'a' + key)%26);
+    }
+
+    private static char funDecryptLetter(char letter, int key){
+        return (char) ('a' +(letter  -  'a' - key)%26);
+    }
+    private static boolean isLowerCase(char c){
+        return c>= 'a' && c<='z';
+    }
+
+    private static StringBuilder processMessage(String message, int key, boolean isEncrypt){
+        StringBuilder resultText = new StringBuilder();
+        for(int i = 0; i<message.length(); i++){
+            char c = message.charAt(i);
+            if(isLowerCase(c)){
+                char proccessedChar;
+                        if(isEncrypt){
+                            proccessedChar=funEncryptLetter(c,key);
+                        }else{
+                            proccessedChar=funDecryptLetter(c,key);
+                        }
+                        resultText.append(proccessedChar);
+            }else{
+                resultText.append(c);
+            }
+        }
+        return resultText;
     }
 
 }
