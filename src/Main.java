@@ -10,6 +10,7 @@ public class Main {
         int key = 0;
         String data = "";
         String outFile=null;
+        String alg="shift";
         //Revisar los argumentos del  arreglo args[]
 
         for (int i = 0; i < args.length; i++) {
@@ -37,6 +38,8 @@ public class Main {
                 }
             }else if(args[i].equals("-out")){
                 outFile=args[i+1];
+            }else if(args[i].equals("-alg")){
+                alg=args[i+1];
             }
         }
         if(data.isEmpty() && outFile == null){
@@ -57,7 +60,7 @@ public class Main {
 
 
                 StringBuilder ciphertext =   new StringBuilder();
-                ciphertext=processMessage(data,key, mode.equals("enc"));
+                ciphertext=processMessage(data,key, alg.equals("shift"),mode.equals("enc"));
 
 
 
@@ -69,47 +72,71 @@ public class Main {
             }
 
 
-
-
-
-
-
-
-
-
-
+    }
+    private static char funEncryptLetter ( char letter,int key, boolean isShift){
+        if(isShift){
+            return (char) ('a' + (letter - 'a' + key)%26);
+        }else {
+            return (char) (letter+ key);
+        }
 
     }
-    private static char funEncryptLetter ( char letter,int key){
-        return (char) ('a' + (letter - 'a' + key)%26);
-    }
 
-    private static char funDecryptLetter(char letter, int key){
-        return (char) ('a' +(letter  -  'a' - key + 26 )%26);
+    private static char funDecryptLetter(char letter, int key,  boolean isShift){
+        if(isShift){
+            return (char) ('a' +(letter  -  'a' - key + 26 )%26);
+        }
+        else{
+            return (char) (letter - key );
+        }
     }
     private static boolean isLowerCase(char c){
         return c>= 'a' && c<='z';
     }
+    private static  boolean isUpperCase(char c){
+        return c>= 'A' && c<='Z';
+    }
 
-    private static StringBuilder processMessage(String message, int key, boolean isEncrypt){
+    private static StringBuilder processMessage(String message, int key, boolean isShift,boolean isEncrypt) {
+
+
         StringBuilder resultText = new StringBuilder();
-        for(int i = 0; i<message.length(); i++){
+
+        for (int i = 0; i < message.length(); i++) {
             char c = message.charAt(i);
-            if(isLowerCase(c)){
+
+            if (isShift) {
+
+                if (isLowerCase(c) || isUpperCase(c)) {
+                    char proccessedChar;
+                    if (isEncrypt) {
+                        proccessedChar = funEncryptLetter(c, key, isShift = true);
+                    } else {
+                        proccessedChar = funDecryptLetter(c, key, isShift = true);
+                    }
+                    resultText.append(proccessedChar);
+                } else {
+                    resultText.append(c);
+                }
+
+            } else {
+
                 char proccessedChar;
-                        if(isEncrypt){
-                            proccessedChar=funEncryptLetter(c,key);
-                        }else{
-                            proccessedChar=funDecryptLetter(c,key);
-                        }
-                        resultText.append(proccessedChar);
-            }else{
-                resultText.append(c);
+                if (isEncrypt) {
+                    proccessedChar = funEncryptLetter(c, key, isShift = false);
+                } else {
+                    proccessedChar = funDecryptLetter(c, key, isShift = false);
+                }
+                resultText.append(proccessedChar);
+
+
             }
+
+
+
         }
         return resultText;
     }
-
     private static String readFromFile(String filename){
         try{
             BufferedReader reader = new BufferedReader(new FileReader(filename));
