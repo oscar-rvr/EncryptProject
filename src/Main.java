@@ -1,3 +1,7 @@
+
+import java.util.Scanner;
+import java.util.Scanner;
+
 import java.io.*;
 import java.util.Scanner;
 
@@ -55,21 +59,21 @@ public class Main {
 
 
 
-            if(mode.equals("enc") || mode.equals("dec")){
+        if(mode.equals("enc") || mode.equals("dec")){
 
 
 
-                StringBuilder ciphertext =   new StringBuilder();
-                ciphertext=processMessage(data,key, alg.equals("shift"),mode.equals("enc"));
+            StringBuilder ciphertext =   new StringBuilder();
+            ciphertext=processMessage(data,key, alg.equals("shift"),mode.equals("enc"));
 
 
 
-                if(outFile!=null){
-                    writeToFile(outFile,ciphertext.toString());
-                }else{
-                    System.out.println(ciphertext);
-                }
+            if(outFile!=null){
+                writeToFile(outFile,ciphertext.toString());
+            }else{
+                System.out.println(ciphertext);
             }
+        }
 
 
     }
