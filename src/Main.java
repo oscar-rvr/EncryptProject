@@ -1,29 +1,35 @@
 
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        String message = "we found a treasure!";
 
-        StringBuffer encryptedText = new StringBuffer();
+        Scanner scan = new Scanner(System.in);
+        String message = scan.nextLine();
+        int key = scan.nextInt();
 
-        for(int i = 0; i<message.length(); i++){
+        StringBuilder ciphertext =   new StringBuilder();
+
+        for (int i  = 0; i<message.length();  i++){
             char c = message.charAt(i);
 
-            if(c >='a' && c <= 'z'){
-                encryptedText.append(funForEncrypt(c));
 
+            if(c>= 'a' && c<= 'z'){
+                char encryptedChar = funEncryptLetter(c,key);
+                ciphertext.append(encryptedChar);
             }else{
-                encryptedText.append(c);
+                ciphertext.append(c);
             }
+
+
         }
-        System.out.println(encryptedText);
 
 
-
+        System.out.println(ciphertext);
 
     }
-    private static char funForEncrypt(char letter){
-        return (char)('a' + ('z'-letter));
+    private static char funEncryptLetter ( char letter,int key){
+        return (char) ('a' + (letter - 'a' + key)%26);
     }
 
 }
