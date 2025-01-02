@@ -3,6 +3,10 @@ import java.util.Scanner;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+
+
+import java.io.*;
+
 public class Main {
     public static void main(String[] args) {
 //valores predeterminados
@@ -26,7 +30,7 @@ public class Main {
                 }
             } else if (args[i].equals("-data")) {
                 data = args[i + 1];
-            }else if(args[i].equals("-in") && data.isEmpty()){
+            }else if(args[i].equals("-in")){
                 //espeeramos leer el archivo
                 data=readFromFile(args[i+1]);
                 System.out.println(data);
@@ -52,21 +56,21 @@ public class Main {
 
 
 
-            if(mode.equals("enc") || mode.equals("dec")){
+        if(mode.equals("enc") || mode.equals("dec")){
 
 
 
-                StringBuilder ciphertext =   new StringBuilder();
-                ciphertext=processMessage(data,key, mode.equals("enc"));
+            StringBuilder ciphertext =   new StringBuilder();
+            ciphertext=processMessage(data,key, mode.equals("enc"));
 
 
 
-                if(outFile!=null){
-                    writeToFile(outFile,ciphertext.toString());
-                }else{
-                    System.out.println(ciphertext);
-                }
+            if(outFile!=null){
+                writeToFile(outFile,ciphertext.toString());
+            }else{
+                System.out.println(ciphertext);
             }
+        }
 
 
 
@@ -81,11 +85,11 @@ public class Main {
 
     }
     private static char funEncryptLetter ( char letter,int key){
-        return (char) ('a' + (letter - 'a' + key)%26);
+        return (char) ('a' + (letter - 'a' + key));
     }
 
     private static char funDecryptLetter(char letter, int key){
-        return (char) ('a' +(letter  -  'a' - key + 26 )%26);
+        return (char) ('a' +(letter  -  'a' - key  ));
     }
     private static boolean isLowerCase(char c){
         return c>= 'a' && c<='z';
@@ -95,17 +99,17 @@ public class Main {
         StringBuilder resultText = new StringBuilder();
         for(int i = 0; i<message.length(); i++){
             char c = message.charAt(i);
-            if(isLowerCase(c)){
-                char proccessedChar;
-                        if(isEncrypt){
-                            proccessedChar=funEncryptLetter(c,key);
-                        }else{
-                            proccessedChar=funDecryptLetter(c,key);
-                        }
-                        resultText.append(proccessedChar);
+            //if(isLowerCase(c)){
+            char proccessedChar;
+            if(isEncrypt){
+                proccessedChar=funEncryptLetter(c,key);
             }else{
-                resultText.append(c);
+                proccessedChar=funDecryptLetter(c,key);
             }
+            resultText.append(proccessedChar);
+            // }else{
+            //resultText.append(c);
+            //}
         }
         return resultText;
     }
@@ -132,5 +136,5 @@ public class Main {
             System.out.println("Error: unable to write to file-> "+filename);
         }
     }
-}
 
+}
